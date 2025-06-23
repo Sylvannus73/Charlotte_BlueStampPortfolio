@@ -47,7 +47,7 @@ For your second milestone, explain what you've worked on since your previous mil
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/CaCazFBhYKs" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
-
+![Headstone Image]
 My major first milestone was creating code to control the robot chassis' movements.  I began by moving each wheel individually before condensing the code to easily call upon the chassis to move forward, backward, left and right.  There were a number of smaller steps necessary to meet this first milestone including:
 - Setting up, troubleshooting, and connecting to the raspberry pi
 - Building the robot chassis
