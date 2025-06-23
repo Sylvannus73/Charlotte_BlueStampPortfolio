@@ -143,14 +143,14 @@ def left (speed=100):
 
 try:
     time.sleep(7)
-    print("Motors left")
+    print("Motors forward and backward")
     forward()
     time.sleep(1)
     backward()
     time.sleep(1)
+    print("Motor right and left")
     right()
     time.sleep(1)
-    print("Motor right")
     left()
     time.sleep(1)
 
