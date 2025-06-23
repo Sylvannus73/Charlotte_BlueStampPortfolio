@@ -56,7 +56,7 @@ My major first milestone was creating code to control the robot chassis' movemen
 # Schematics 
 ![Headstone Image](Scheme-it-export-New-Project-2025-06-20-11-51.png)
 # Code
-Here's where you'll put your code. The syntax below places it into a block of code. Follow the guide [here]([url](https://www.markdownguide.org/extended-syntax/)) to learn how to customize it to your project needs. 
+This is my code from Milestone 1.  It utilizes the library to import features like the GPIO pins and time.  Defining variables and functions is the backbone of the code, beginning with defining various GPIO pins as motor inputs.  
 
 ```C++
 # Motor A and B pins
