@@ -58,17 +58,108 @@ My major first milestone was creating code to control the robot chassis' movemen
 # Code
 Here's where you'll put your code. The syntax below places it into a block of code. Follow the guide [here]([url](https://www.markdownguide.org/extended-syntax/)) to learn how to customize it to your project needs. 
 
-```c++
-void setup() {
-  // put your setup code here, to run once:
-  Serial.begin(9600);
-  Serial.println("Hello World!");
-}
+```C++
+# Motor A and B pins
+B_1A = 24
+B_1B = 13
+A_1A = 18
+A_1B = 23
 
-void loop() {
-  // put your main code here, to run repeatedly:
+import RPi.GPIO as GPIO
+import time
 
-}
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+
+for pin in [A_1A, A_1B, B_1A, B_1B]:
+    GPIO.setup(pin, GPIO.OUT)
+
+#PWM at 100 Hz
+pwm_A_1A = GPIO.PWM(A_1A, 100)
+pwm_A_1B = GPIO.PWM(A_1B, 100)
+pwm_B_1A = GPIO.PWM(B_1A, 100)
+pwm_B_1B = GPIO.PWM(B_1B, 100)
+
+pwm_A_1A.start(0)
+pwm_A_1B.start(0)
+pwm_B_1A.start(0)
+pwm_B_1B.start(0)
+
+#Define motor movements
+
+def MotorA_forward(speed=100):
+    pwm_A_1A.ChangeDutyCycle(0)
+    pwm_A_1B.ChangeDutyCycle(speed)
+
+def MotorA_backward(speed=100):
+    pwm_A_1A.ChangeDutyCycle(speed)
+    pwm_A_1B.ChangeDutyCycle(0)
+
+def MotorB_forward(speed=100):
+    pwm_B_1A.ChangeDutyCycle(speed)
+    pwm_B_1B.ChangeDutyCycle(0)
+
+def MotorB_backward(speed=100):
+    pwm_B_1A.ChangeDutyCycle(0)
+    pwm_B_1B.ChangeDutyCycle(speed)
+
+def stop_all(speed=0):
+    for pwm in [pwm_A_1A, pwm_A_1B, pwm_B_1A, pwm_B_1B]:
+        pwm.ChangeDutyCycle(0)
+        pwm.ChangeDutyCycle(speed)
+    pwm_A_1A.stop()
+    pwm_A_1B.stop()
+    pwm_B_1A.stop()
+    pwm_B_1B.stop()
+
+def forward (speed=100):
+    MotorB_forward()
+    MotorA_forward()
+
+def backward (speed=100):
+    MotorA_backward()
+    MotorB_backward()
+
+def right (speed=100):
+    MotorB_forward()
+    time.sleep(1)
+    pwm_B_1A.ChangeDutyCycle(0)
+    pwm_B_1B.ChangeDutyCycle(0)
+
+
+   
+
+def left (speed=100):
+    MotorA_forward()
+    time.sleep(1)
+    pwm_A_1A.ChangeDutyCycle(0)
+    pwm_A_1B.ChangeDutyCycle(0)
+
+    
+    
+    
+#test sequence
+
+try:
+    time.sleep(7)
+    print("Motors left")
+    forward()
+    time.sleep(1)
+    backward()
+    time.sleep(1)
+    right()
+    time.sleep(1)
+    print("Motor right")
+    left()
+    time.sleep(1)
+
+finally:
+    stop_all()
+    print("Test complete")
+    GPIO.cleanup()
+
+
 ```
 
 # Bill of Materials
