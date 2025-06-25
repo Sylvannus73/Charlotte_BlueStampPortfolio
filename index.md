@@ -39,7 +39,9 @@ For your second milestone, explain what you've worked on since your previous mil
 - Technical details of what you've accomplished and how they contribute to the final goal
 - What has been surprising about the project so far
 - Previous challenges you faced that you overcame
-- What needs to be completed before your final milestone 
+- What needs to be completed before your final milestone
+- Object Tracking
+- Setting up camera and taking picture
 
 
 ### Object Tracking:
@@ -51,6 +53,11 @@ After maksing, eroding and dilating the image contouring can be applied to detec
 
 After contouring creates an outline of the object a centroid can be applied.  This will take a mean of all the x and y values of the pixels in the object to find the center point.  In the final image you can see the red ball outlined by contour with a blue dot in the middle, a result of the centroid.  Once the center is identified and labled we can use that point to move the camera to track this center.  The first code I created calculated and displayed how far offset the center of the ball was from the center of the camera and classified is this was "OffsetLEFT" or "OffsetRIGHT".  I then created code so that the robot would turn left or right until the object was in the center of its vision.  This allowed the robot ot track the ball as it moved. (for more information on the code see below)
 
+**Here is an outline on how morphological transitions can effect an image:**
+![Headstone Image](frame.jpg) This was the original picture taken by the raspberry pi camera
+![Headstone Image](mask.jpg) This is that same image after maksing, erosion, and dilation
+![Headstone Image](contour.jpg) This is the image after contouring
+![Headstone Image](centroid.jpg) This is the image with the center identified
 
 # First Milestone
 
