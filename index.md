@@ -42,7 +42,7 @@ For your second milestone, explain what you've worked on since your previous mil
 - What needs to be completed before your final milestone 
 
 
-** Object Tracking: **
+# Object Tracking:
 In order to track the red ball (or another object) the raspberry pi needs to follow a number of steps to first identify where the object is.  These steps, or morphological transformations, include maksing, erosion, dilation, contouring and centriods (in that order).  Masking, the first step, involves telling the raspberry pi what to focus on in the image.  In this case that was the red ball.  So, the mask I created focused on anything that was the color red.  In the HSV spectrum that involved any colors with a hue value between 0-10 and 160-179.  Because red is the start of the color wheel (0) it is also the end (180) and you therefore need multiple color arrays to include both of these ranges.  The second image below was produced after applying this mask.  The parts that were identified as red are in white and all other colors in black.  The white is the area that will be detected and the black is the area that is hidden or ignored.
 
 
