@@ -42,6 +42,9 @@ For your second milestone, explain what you've worked on since your previous mil
 - What needs to be completed before your final milestone
 - Object Tracking
 - Setting up camera and taking picture
+- Live camera feed and tracking
+- Add code and mounted robot
+- Add other picture without erosion and dilation
 
 
 ### Object Tracking:
