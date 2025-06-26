@@ -42,6 +42,7 @@ For your second milestone, explain what you've worked on since your previous mil
 - Add other picture without erosion and dilation
 
 ### Setting up Raspberry Pi Camera, Taking a Picture, and Live Feed:
+The first step to completing this milestone was setting up the Raspberry Pi camera and installing the necessary packages to use it (like cv2).  After this I moved on to taking a picture with the camera (see code below).  After that, I set up a live feed that streamed from the camera into a browser.  This gives you live updates and tracking (see code below).
 
 ### Mounting:
 Once every component was working I mounted it on the robot chassis.  This is temporary, as it is currently mounted with pipe cleaners which are not strong and a potential fire hazard.  I will be remounting the components later with double-sided tape.
