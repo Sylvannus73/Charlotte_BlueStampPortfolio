@@ -44,6 +44,8 @@ For your second milestone, explain what you've worked on since your previous mil
 ### Setting up Raspberry Pi Camera, Taking a Picture, and Live Feed:
 
 ### Mounting:
+Once every component was working I mounted it on the robot chassis.  This is temporary, as it is currently mounted with pipe cleaners which are not strong and a potential fire hazard.  I will be remounting the components later with double-sided tape.
+
 
 ![Headstone Image](IMG_0940.jpg)
 ### Object Tracking:
