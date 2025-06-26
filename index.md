@@ -60,6 +60,9 @@ After contouring creates an outline of the object a centroid can be applied.  Th
 ![Headstone Image](mask.jpg) 
 ![Headstone Image](contour.jpg) 
 ![Headstone Image](centroid.jpg) 
+![Headstone Image](resultmasl.jpg)
+*This last image is an example of an image with just a mask, no erosion or dilation.  It is from a different orginal picture then the others
+
 
 # First Milestone
 
