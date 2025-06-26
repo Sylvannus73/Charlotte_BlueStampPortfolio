@@ -188,7 +188,7 @@ finally:
 
 
 ```
-Here is the code at the second Milestone (the names are what I have named the files).  The first two sets of code set up what the robot draws upon to track the ball.  The motor function (MotorTest.py) has been modified from the first Milestone to allow the robot to better adjust its position and track the ball more precisely.  The second set of code (Video.py) starts by importing the necessary packages, including MotorTest.py to draw upon the motor function.  
+Here is the code at the second Milestone (the names are what I have named the files).  The first two sets of code set up what the robot draws upon to track the ball.  The motor function (MotorTest.py) has been modified from the first Milestone to allow the robot to better adjust its position and track the ball more precisely.  The second set of code (Camera2.py) starts by importing the necessary packages, takes a pictures, then applies the morphological transition discussed above (masking, eroding, dilating, contouring, and centroid) in order to identify where the ball is in that picture.  The final set of code (Video.py) also begins by importing the necessary packages (imcluding MotorTest.py to draw upon the motor functions).  It creates a function that tracks the red ball as it moves by defining how far offset the ball is the calling upon the correct motor function to move the necessary amount.  It then creates a way to view the live video feed from the camera in a browser.
 
 ### MotorTest.py
 ```C++
