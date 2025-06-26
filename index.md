@@ -188,6 +188,282 @@ finally:
 
 
 ```
+Here is the code at the second Milestone (the names are what I have named the files).  The first two sets of code set up what the robot draws upon to track the ball.  The motor function (MotorTest.py) has been modified from the first Milestone to allow the robot to better adjust its position and track the ball more precisely.  The second set of code (Video.py) starts by importing the necessary packages, including MotorTest.py to draw upon the motor function.  
+
+###MotorTest.py
+```C++
+# Motor A and B pins
+B_1A = 24
+B_1B = 13
+A_1A = 18
+A_1B = 23
+
+import RPi.GPIO as GPIO
+import time
+
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+
+for pin in [A_1A, A_1B, B_1A, B_1B]:
+    GPIO.setup(pin, GPIO.OUT)
+
+#PWM at 100 Hz
+pwm_A_1A = GPIO.PWM(A_1A, 100)
+pwm_A_1B = GPIO.PWM(A_1B, 100)
+pwm_B_1A = GPIO.PWM(B_1A, 100)
+pwm_B_1B = GPIO.PWM(B_1B, 100)
+
+pwm_A_1A.start(0)
+pwm_A_1B.start(0)
+pwm_B_1A.start(0)
+pwm_B_1B.start(0)
+
+#Define motor movements
+
+def MotorA_forward(speed=100):
+    pwm_A_1A.ChangeDutyCycle(0)
+    pwm_A_1B.ChangeDutyCycle(speed)
+
+def MotorA_backward(speed=100):
+    pwm_A_1A.ChangeDutyCycle(speed)
+    pwm_A_1B.ChangeDutyCycle(0)
+
+def MotorB_forward(speed=100):
+    pwm_B_1A.ChangeDutyCycle(speed)
+    pwm_B_1B.ChangeDutyCycle(0)
+
+def MotorB_backward(speed=100):
+    pwm_B_1A.ChangeDutyCycle(0)
+    pwm_B_1B.ChangeDutyCycle(speed)
+
+def stop_all(speed=100):
+    for pwm in [pwm_A_1A, pwm_A_1B, pwm_B_1A, pwm_B_1B]:
+        pwm.ChangeDutyCycle(speed)
+
+def forward (speed=100):
+    MotorB_forward()
+    MotorA_forward()
+
+def backward (speed=100):
+    MotorA_backward()
+    MotorB_backward()
+
+
+def rightMajor (speed=50):
+    MotorB_forward()
+    MotorA_backward()
+    time.sleep(0.10)
+    MotorA_forward()
+    MotorB_forward()
+    time.sleep(.0001)
+    stop_all()
+    time.sleep(0.10)
+    
+
+    
+def rightSmall (speed=1):
+    MotorB_forward()
+    MotorA_backward()
+    time.sleep(0.001)
+    stop_all()
+    time.sleep(0.06)
+
+
+def leftMajor (speed=50):
+    MotorA_forward()
+    MotorB_backward()
+    time.sleep(0.10)
+    stop_all()
+    time.sleep(0.10)
+
+
+def leftSmall (speed=1):
+    MotorA_forward()
+    MotorB_backward()
+    time.sleep(0.001)
+    stop_all()
+    time.sleep(0.06)
+
+```
+
+###Camera2.py
+```C++
+from picamera2 import Picamera2
+import cv2
+import numpy as np
+
+
+#Intilialize and configure the camera
+picam2= Picamera2()
+picam2.configure(picam2.create_preview_configuration(main={"format": "RGB888", "size": (640,480)}))
+picam2.start()
+
+#capture one frame
+frame = picam2.capture_array()
+
+#save to file
+cv2.imwrite("ogframe.jpg", frame)
+print("Frame saved as ogframe.jpg")
+
+#save into var image
+image = frame
+hsv_image = cv2.cvtColor(image, cv2.COLOR_RGB2HSV)
+
+lower_red = np.array([0, 50, 50])
+upper_red = np.array([10, 255, 255])
+lower_red2 = np.array([160, 100, 100])
+upper_red2 = np.array([179, 255, 255])
+
+kernel = np.ones((5,5), np.int8)
+
+mask1 = cv2.inRange(hsv_image, lower_red, upper_red)
+mask2 = cv2.inRange(hsv_image, lower_red2, upper_red2)
+mask = cv2.bitwise_or(mask1, mask2)
+mask = cv2.erode(mask, kernel, iterations=2)
+mask = cv2.dilate(mask, kernel, iterations=2)
+image_copy = image.copy()
+
+
+
+
+contours, _ =cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+#find the largest contour by area
+if contours:
+    largest_contour= max(contours, key=cv2.contourArea)
+cv2.drawContours(image=image_copy, contours=[largest_contour], contourIdx=-1,color=(0,255,0), thickness=2, lineType=cv2.LINE_AA)
+
+
+M = cv2.moments(largest_contour)
+if M['m00']>0:
+    cx = int(M["m10"]/ M["m00"])
+    cy = int(M["m01"]/ M["m00"])
+    cv2.circle(image_copy, (cx, cy), 5, (255, 0, 0), -1)
+
+#save to file
+cv2.imwrite("resultframe.jpg", image_copy)
+print("Frame saved as resultframe.jpg")
+
+
+```
+
+###Video.py
+```C++
+from flask import Flask, Response, render_template_string
+app = Flask(__name__)
+import cv2
+import numpy as np
+from picamera2 import Picamera2
+import RPi.GPIO as GPIO
+import time
+from MotorTest import *
+
+app = Flask(__name__)
+
+#initialize PiCam
+picam2= Picamera2()
+picam2.configure(picam2.create_preview_configuration(main={"format": "BGR888", "size": (640,480)}))
+picam2.start()
+
+FRAME_WIDTH = 640
+CENTER_X = FRAME_WIDTH // 2
+
+def track_red_ball(frame):
+    image = frame
+    hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+
+    lower_red = np.array([0, 50, 50])
+    upper_red = np.array([10, 255, 255])
+    lower_red2 = np.array([160, 100, 100])
+    upper_red2 = np.array([179, 255, 255])
+
+    kernel = np.ones((5,5), np.int8)
+
+    mask1 = cv2.inRange(hsv_image, lower_red, upper_red)
+    mask2 = cv2.inRange(hsv_image, lower_red2, upper_red2)
+    mask = cv2.bitwise_or(mask1, mask2)
+    mask = cv2.erode(mask, kernel, iterations=2)
+    mask = cv2.dilate(mask, kernel, iterations=2)
+    image_copy = image.copy()
+
+    contours, _ =cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    if contours:
+        largest_contour= max(contours, key=cv2.contourArea)
+        cv2.drawContours(image=image_copy, contours=[largest_contour], contourIdx=-1,color=(0,255,0), thickness=2, lineType=cv2.LINE_AA)
+        M = cv2.moments(largest_contour)
+        if M['m00']>0:
+            cx = int(M["m10"]/ M["m00"])
+            cy = int(M["m01"]/ M["m00"])
+            cv2.circle(image_copy, (cx, cy), 5, (255, 0, 0), -1)
+                
+            
+            if( cx-140 > CENTER_X):
+                position = "OffsetRIGHTMajor"
+                rightMajor()
+            elif( cx-70 > CENTER_X):
+                position = "OffsetRIGHTSmall"
+                rightSmall()
+            elif(cx+140 < CENTER_X):
+                position = "OffsetLEFTMajor"
+                leftMajor()
+            elif(cx+70 < CENTER_X):
+                position = "OffsetLEFTSmall"
+                leftSmall()
+            else:
+                position = "Centered"
+                stop_all()
+            
+
+            cv2.putText(image_copy, f"Offset: {cx-CENTER_X} ({position})", (10, 30),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+            
+
+    return image_copy
+    
+
+def generate_frames():
+    while True:
+        frame = picam2.capture_array()
+        frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+        frame = track_red_ball(frame) 
+        ret, buffer = cv2.imencode('.jpg', frame)
+        jpg_frame = buffer.tobytes()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n'
+               b'Content-Length: ' + f"{len(jpg_frame)}".encode() + b'\r\n\r\n' +
+               jpg_frame + b'\r\n')
+
+
+
+
+
+@app.route('/')
+def index():
+    return render_template_string('''
+        <html>
+            <head><title>Red Ball Tracking Stream</title></head>
+            <body>
+                <h2>Live Tracking</h2>
+                <img src="/video_feed">
+            </body>
+        </html>
+    ''')
+
+
+
+@app.route('/video_feed')
+def video_feed():
+    return Response(generate_frames(),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+
+
+
+```
+
 # Code (Final)
 
 ```C++
