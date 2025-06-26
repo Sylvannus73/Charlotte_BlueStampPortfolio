@@ -30,22 +30,16 @@ For your final milestone, explain the outcome of your project. Key details to in
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/y3VAmNlER5Y" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 
-For your second milestone, explain what you've worked on since your previous milestone. You can highlight:
-- Technical details of what you've accomplished and how they contribute to the final goal
-- What has been surprising about the project so far
-- Previous challenges you faced that you overcame
-- What needs to be completed before your final milestone
-- Object Tracking
-- Setting up camera and taking picture
-- Live camera feed and tracking
-- Add code and mounted robot
-- Add other picture without erosion and dilation
+My Milestone 2 was having the robot track the ball as it moved.  This included a number of components including:
+- Setting up the Raspberry Pi camer, taking a picture and setting up a live feed
+- Mounting all of the components onto the robot chassis
+- Learning and setting up object tracking
 
 ### Setting up Raspberry Pi Camera, Taking a Picture, and Live Feed:
 The first step to completing this milestone was setting up the Raspberry Pi camera and installing the necessary packages to use it (like cv2).  After this I moved on to taking a picture with the camera (see code below).  After that, I set up a live feed that streamed from the camera into a browser.  This gives you live updates and tracking (see code below).
 
 ### Mounting:
-Once every component was working I mounted it on the robot chassis.  This is temporary, as it is currently mounted with pipe cleaners which are not strong and a potential fire hazard.  I will be remounting the components later with double-sided tape.
+Once every component was working I mounted it on the robot chassis.  This is temporary, as it is currently mounted with pipe cleaners which are not strong and a potential fire hazard.  I will be remounting the components later with double-sided tape.  But, the components have stayed secure and mounting allows the robot to move and turn freely.
 
 
 ![Headstone Image](IMG_0940.jpg)
