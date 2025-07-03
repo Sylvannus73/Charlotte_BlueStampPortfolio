@@ -495,9 +495,14 @@ Don't forget to place the link of where to buy each component inside the quotati
 
 
 # Other Resources/Examples
-One of the best parts about Github is that you can view how other people set up their own work. Here are some past BSE portfolios that are awesome examples. You can view how they set up their portfolio, and you can view their index.md files to understand how they implemented different portfolio components.
-- [Example 1](https://trashytuber.github.io/YimingJiaBlueStamp/)
-- [Example 2](https://sviatil0.github.io/Sviatoslav_BSE/)
-- [Example 3](https://arneshkumar.github.io/arneshbluestamp/)
+- [Ball Tracking Robot](https://www.instructables.com/Ball-Tracking-Robot/)
+- [Getting Started: Raspberry Pi](https://www.raspberrypi.com/documentation/computers/getting-started.html#installing-the-operating-system/)
+- [Raspberry Pi Pinout](https://pinout.xyz/pinout/pwm/)
+- [Motor Control](https://ankitasinha0811.medium.com/motor-control-using-raspberry-pi-4-127193e63d69/)
+- [Hue, Value, and Saturation](https://learn.leighcotnoir.com/artspeak/elements-color/hue-value-saturation/)
+- [Ultrasonic Distance Sensor](https://projects.raspberrypi.org/en/projects/physical-computing/12/)
+- [Servo Code](https://github.com/ArduCAM/PCA9685/)
+- [Calling C Functions from Python](https://www.digitalocean.com/community/tutorials/calling-c-functions-from-python/)
+- [Object Recognition Code](https://github.com/notindenial/Pi-Object-Recognition/)
+- [Object Recognition Code](https://github.com/sentairanger/YOLO11n-PiCamera2-Livestream/)
 
-To watch the BSE tutorial on how to create a portfolio, click here.
