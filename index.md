@@ -22,6 +22,8 @@ My final milestone included adding a ton of modifications to my robot, including
 
 
 ### Image Recognition Software
+I used pre-existing code (see link below) to run image recognition software on my Raspberry Pi.  I used two different code for this to get different results.  The first runs a live video feed in a browers that automatically identifies and displays what objects or animals are in frame.  I added code so that when a certain thing is identified (I set it to humans but other animals/objects can be used) that frame is saved as a seperate picture.  This also required using a timestamp as part of the file name and regularly calling upon it in the code so it would update.  Someone could switch this out for a variable that regularly changes.  This is very convenient but the feed is very slow.  The second also runs a live feed from the camera in a browers but has buttons to manually take pictures, have those pictures analysed, then stored.  This is less convenient but the feed is much faster.  While using this I noticed that if you take multiple pictures before having it analyze the first one the newest picture will replace the previous ones (it does not save multiple unanalysed pictures).  Both code utilize YOLO (You Only Look Once) algorithm for image detection.  I am hoping that by ultilizing these image recognition capabilities that robot can serve as a wildlife camera.
+
 ### Servo
 ### Distance Sensors
 ### Miscellaneous Modifications
