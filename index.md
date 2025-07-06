@@ -17,7 +17,7 @@ Replace this text with a brief description (2-3 sentences) of your project. This
 My final milestone included adding a ton of modifications to my robot, including:
 - Image recognition software
 - Servo as a camera mount
-- Distance sensors to prevent crashes
+- Ultrasonic distance sensors to prevent crashes
 - Some smaller, sillier modifications
 
 
@@ -27,7 +27,9 @@ I used pre-existing code (see link below) to run image recognition software on m
 ### Servo
 I mounted the Raspberry Pi camera onto a servo (see link to item below).  Servos work differently from the motors for the wheels as they move to a specific position rather than just spinning until stopped.  You can adjust the speeed or torque of a servo but I did not for this project.  The particular servo here only uses C code and as a result the coding process was a lot more complicated.  I first had to learn and run the commands in C (which required a special virtual environment) then combine all the relevnt files into one, make that file a shared filed (so it can be called upon in python), then import the file and use specific python commands so the servo would respond.  Once that was done it was fairly easy to adjust certain variables for the camera to easily track the ball.  In my code I just used servo degree increase or decrease functions and had certain intervals where it would change the degree by more or less.  One could also have the Rapsberry Pi calculate how much the servo angle needs to change based on how offset the ball is (using basic math and a proportionality constant).  I had some issues with the camera ribbon getting caught on the bottom servo and am planning on flipping the camera upside down once I have a longer camera ribbon (and adding code for the camera to flip images verticially so images still apear normall).
 
-### Distance Sensors
+### Ultrasonic Distance Sensors
+My final major modification was adding distance sensors.  I noticed during Milestone 2 that the robot would slowly shift backwards and forwards as it tracked the ball.  This would cause it to sometimes run into object and I wanted to prevent this from happening.  I only used two distance sensors total, one in the front and one in the back because I was just trying to stop it from running into things, not accurately pin point distance.  Ultrasonic distance sensors work by sending out sound waves which are then reflected of an object back to the sensor which measures the amount of time that takes to calculate distance.  If you wanted to determine if an object is left or right, or dtermine how far it is with accuracy, more distance sensors in a variety of posistions would be needed.  When coding the sensors I adjusted the threshold distance to be very small (I did not adjust the max distance because that was unnecessary) and created a sequence for the robot to follow when something was in this threshold distance (essentially just move forward or backward).
+
 ### Miscellaneous Modifications
 ### Final Thoughts
 
