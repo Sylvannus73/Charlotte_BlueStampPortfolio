@@ -1,5 +1,5 @@
 # Ball Tracking Robot
-Replace this text with a brief description (2-3 sentences) of your project. This description should draw the reader in and make them interested in what you've built. You can include what the biggest challenges, takeaways, and triumphs from completing the project were. As you complete your portfolio, remember your audience is less familiar than you are with all that your project entails!
+The ball tracking robot utilizes a Raspberry Pi, camera, and open cv to identify and track a red ball.  It also uses a YOLO (You Only Look Once) algorithim to identify animals and objects that enter its field of view.  The robot has potential applications as a wildlife camera or other security or tracking device.
 
 
 | **Engineer** | **School** | **Area of Interest** | **Grade** |
