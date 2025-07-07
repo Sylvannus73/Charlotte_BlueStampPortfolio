@@ -1,5 +1,5 @@
 # Ball Tracking Robot
-The ball tracking robot utilizes a Raspberry Pi, camera, and open cv to identify and track a red ball.  It also uses a YOLO (You Only Look Once) algorithim to identify animals and objects that enter its field of view.  The robot has potential applications as a wildlife camera or other security or tracking device.
+The ball tracking robot utilizes a Raspberry Pi, camera, and open cv to identify and track a red ball.  It also uses a YOLO (You Only Look Once) algorithim to identify animals and objects that enter its field of view.  The robot has potential applications as a wildlife camera or other security and tracking device.
 
 
 | **Engineer** | **School** | **Area of Interest** | **Grade** |
