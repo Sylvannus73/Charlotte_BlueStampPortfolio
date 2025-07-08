@@ -91,6 +91,7 @@ My major first milestone was creating code to control the robot chassis' movemen
 # Schematics 
 ![Headstone Image](Scheme-it-export-New-Project-2025-06-20-11-51.png)
 ![Headstone Image](SchematicsServo.jpg)
+![Headstone Image](SchematicsSensor.jpg)
 # Code (at Milestones)
 This is my code from Milestone 1.  It utilizes the library to import features like the GPIO pins and time.  Defining variables and functions is the backbone of the code, beginning with defining various GPIO pins as motor inputs.  I then do some important set-up things, including setting the GPIO pins as outputs (so they will respond to code telling them to output certain signals), setting the Hz for the PWM pins (so speed of motors can be adjusted), and defining how the motors should be at the beginning of the code.  I then define the basic motor movements.  The motor driver that I am using controls two motors and moves the wheel forward or backward based on what recieves power form the Raspberry Pi (ex. A_1A receiving power but A_1B not will move motor A backwards).  Using these basic motor movemnets, I further condensed the code to create commands to move the robot forward, backward, left, and right.  The code ends with a test sequence that allows one to test different parts of the code.  I repeatedly edited thsi portion to ensure that all parts of the code was functioning.  By using "try" and "finally" instead of "while True" ensured that the motors would stop after the test (as a ending sequence can be coded).
 
