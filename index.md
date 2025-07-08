@@ -587,8 +587,7 @@ def leftMinor (speed=1):
 
 ```
 ### Sensor.py
-```
-  python
+```python
 #set up
 from gpiozero import DistanceSensor
 ultrasonic2 = DistanceSensor(echo=19, trigger=12, threshold_distance=0.1)
