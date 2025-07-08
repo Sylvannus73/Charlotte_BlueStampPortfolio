@@ -672,7 +672,7 @@ def track_red_ball(frame):
             cy = int(M["m01"]/ M["m00"])
             cv2.circle(image_copy, (cx, cy), 5, (255, 0, 0), -1)
                 
-            #Telling the robot how to turn after the center of the object has been identified
+            #Telling the servo how to turn after the center of the object has been identified
             if( cx-140 > CENTER_X):
                 position = "OffsetRIGHTMajor"
                 rightMajor()
@@ -722,7 +722,153 @@ def track_red_ball(frame):
 
     return image_copy
     
-#Generating teh live feed
+#Generating the live feed
+def generate_frames():
+    while True:
+        frame = picam2.capture_array()
+        frame = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+        frame = track_red_ball(frame) 
+        ret, buffer = cv2.imencode('.jpg', frame)
+        jpg_frame = buffer.tobytes()
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n'
+               b'Content-Length: ' + f"{len(jpg_frame)}".encode() + b'\r\n\r\n' +
+               jpg_frame + b'\r\n')
+
+
+
+
+#Putting that live feed in html for vieiwng in a browser
+@app.route('/')
+def index():
+    return render_template_string('''
+        <html>
+            <head><title>Red Ball Tracking Stream</title></head>
+            <body>
+                <h2>Live Tracking</h2>
+                <img src="/video_feed">
+            </body>
+        </html>
+    ''')
+
+
+
+@app.route('/video_feed')
+def video_feed():
+    return Response(generate_frames(),
+                    mimetype='multipart/x-mixed-replace; boundary=frame')
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+
+```
+
+### VideoStationary.py
+```python
+#Set up
+from flask import Flask, Response, render_template_string
+app = Flask(__name__)
+import cv2
+import numpy as np
+from picamera2 import Picamera2
+import RPi.GPIO as GPIO
+import time
+from MotorTest import *
+from ctypes import *
+total = CDLL("./PCA9685/example/rpi/total2.so")
+total.main()
+
+app = Flask(__name__)
+
+#initialize PiCam
+picam2= Picamera2()
+picam2.configure(picam2.create_preview_configuration(main={"format": "BGR888", "size": (640,480)}))
+picam2.start()
+
+FRAME_WIDTH = 640
+FRAME_HEIGHT = 640
+CENTER_X = FRAME_WIDTH // 2
+
+#Defining the main function that tracks the ball
+def track_red_ball(frame):
+    #Finidng the correct object and  it center 
+    image = frame
+    hsv_image = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+
+
+    lower_red = np.array([0, 50, 50])
+    upper_red = np.array([10, 255, 255])
+    lower_red2 = np.array([160, 100, 100])
+    upper_red2 = np.array([179, 255, 255])
+
+    kernel = np.ones((5,5), np.int8)
+
+    mask1 = cv2.inRange(hsv_image, lower_red, upper_red)
+    mask2 = cv2.inRange(hsv_image, lower_red2, upper_red2)
+    mask = cv2.bitwise_or(mask1, mask2)
+    mask = cv2.erode(mask, kernel, iterations=2)
+    mask = cv2.dilate(mask, kernel, iterations=2)
+    image_copy = image.copy()
+
+    contours, _ =cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    if contours:
+        largest_contour= max(contours, key=cv2.contourArea)
+        cv2.drawContours(image=image_copy, contours=[largest_contour], contourIdx=-1,color=(0,255,0), thickness=2, lineType=cv2.LINE_AA)
+        M = cv2.moments(largest_contour)
+        if M['m00']>0:
+            cx = int(M["m10"]/ M["m00"])
+            cy = int(M["m01"]/ M["m00"])
+            cv2.circle(image_copy, (cx, cy), 5, (255, 0, 0), -1)
+                
+              #Telling the robot how to turn after the center of the object has been identified
+            if( cx-170 > CENTER_X):
+                position = "OffsetRIGHTMajor"
+                total.ServoDegreeIncrease(0,8)
+
+            elif( cx-140 > CENTER_X):
+                position = "OffsetRIGHTMinor"
+                total.ServoDegreeIncrease(0,6)
+
+            elif( cx-70 > CENTER_X):
+                position = "OffsetRIGHTMicro"
+                total.ServoDegreeIncrease(0,4)
+            elif(cx+170 < CENTER_X):
+                position = "OffsetLEFTMajor"
+                total.ServoDegreeDecrease(0,8)
+            
+            elif(cx+140 < CENTER_X):
+                position = "OffsetLEFTMinor"
+                total.ServoDegreeDecrease(0,6)
+
+            elif(cx+70 < CENTER_X):
+                position = "OffsetLEFTMicro"
+                total.ServoDegreeDecrease(0,4)
+            
+            elif(cy-120 > CENTER_X):
+                    position = "OffsetDOWNMajor"
+                    total.ServoDegreeDecrease(1,10)
+            elif(cy-50 > CENTER_X):
+                    position = "OffsetDOWNMinor"
+                    total.ServoDegreeDecrease(1,5)
+            elif(cy+140 < CENTER_X):
+                    position = "OffsetUPMajor"
+                    total.ServoDegreeIncrease(1,8)
+            elif(cy+70 < CENTER_X):
+                    position = "OffsetUPMinor"
+                    total.ServoDegreeIncrease(1,5)
+
+
+            else:
+                position = "Centered"
+                stop_all()
+
+            
+
+            cv2.putText(image_copy, f"Offsetx: {cx-CENTER_X} ({position})", (10, 30),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
+    return image_copy
+    
+#Generating the live feed
 def generate_frames():
     while True:
         frame = picam2.capture_array()
@@ -761,8 +907,8 @@ def video_feed():
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
 
-```
 
+```
 # Bill of Materials
 Here's where you'll list the parts in your project. To add more rows, just copy and paste the example rows below.
 Don't forget to place the link of where to buy each component inside the quotation marks in the corresponding row after href =. Follow the guide [here]([url](https://www.markdownguide.org/extended-syntax/)) to learn how to customize this to your project needs. 
