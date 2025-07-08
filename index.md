@@ -586,6 +586,34 @@ def leftMinor (speed=1):
 
 
 ```
+### Sensor.py
+```
+  python
+#set up
+from gpiozero import DistanceSensor
+ultrasonic2 = DistanceSensor(echo=19, trigger=12, threshold_distance=0.1)
+ultrasonic1 = DistanceSensor(echo=6, trigger=5, threshold_distance=0.1)
+from MotorTest import *
+import time
+
+#Defining what to do when the front of back sensor gets too close to an object
+def closeF():
+    print("Too close")
+    backward()
+    time.sleep(0.4)
+    stop_all()
+    time.sleep(0.1)
+    print(ultrasonic1.distance)
+
+def closeB():
+    print("Too close")
+    forward()
+    time.sleep(0.4)
+    stop_all()
+    time.sleep(0.1)
+    print(ultrasonic2.distance)
+
+```
 
 # Bill of Materials
 Here's where you'll list the parts in your project. To add more rows, just copy and paste the example rows below.
