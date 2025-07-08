@@ -93,7 +93,7 @@ My major first milestone was creating code to control the robot chassis' movemen
 # Code (at Milestones)
 This is my code from Milestone 1.  It utilizes the library to import features like the GPIO pins and time.  Defining variables and functions is the backbone of the code, beginning with defining various GPIO pins as motor inputs.  I then do some important set-up things, including setting the GPIO pins as outputs (so they will respond to code telling them to output certain signals), setting the Hz for the PWM pins (so speed of motors can be adjusted), and defining how the motors should be at the beginning of the code.  I then define the basic motor movements.  The motor driver that I am using controls two motors and moves the wheel forward or backward based on what recieves power form the Raspberry Pi (ex. A_1A receiving power but A_1B not will move motor A backwards).  Using these basic motor movemnets, I further condensed the code to create commands to move the robot forward, backward, left, and right.  The code ends with a test sequence that allows one to test different parts of the code.  I repeatedly edited thsi portion to ensure that all parts of the code was functioning.  By using "try" and "finally" instead of "while True" ensured that the motors would stop after the test (as a ending sequence can be coded).
 
-```C++
+```python
 # Motor A and B pins
 B_1A = 24
 B_1B = 13
@@ -200,7 +200,7 @@ finally:
 Here is the code at the second Milestone (the names are what I have named the files).  The first two sets of code set up what the robot draws upon to track the ball.  The motor function (MotorTest.py) has been modified from the first Milestone to allow the robot to better adjust its position and track the ball more precisely.  The second set of code (Camera2.py) starts by importing the necessary packages, takes a pictures, then applies the morphological transition discussed above (masking, eroding, dilating, contouring, and centroid) in order to identify where the ball is in that picture.  The final set of code (Video.py) also begins by importing the necessary packages (imcluding MotorTest.py to draw upon the motor functions).  It creates a function that tracks the red ball as it moves by defining how far offset the ball is the calling upon the correct motor function to move the necessary amount.  It then creates a way to view the live video feed from the camera in a browser.
 
 ### MotorTest.py
-```C++
+```python
 # Motor A and B pins
 B_1A = 24
 B_1B = 13
@@ -297,7 +297,7 @@ def leftSmall (speed=1):
 ```
 
 ### Camera2.py
-```C++
+```python
 from picamera2 import Picamera2
 import cv2
 import numpy as np
@@ -358,7 +358,7 @@ print("Frame saved as resultframe.jpg")
 ```
 
 ### Video.py
-```C++
+```python
 from flask import Flask, Response, render_template_string
 app = Flask(__name__)
 import cv2
@@ -475,7 +475,116 @@ if __name__ == '__main__':
 
 # Code (Final)
 
-```C++
+### MotorTest.py
+```python
+# Motor A and B pins
+B_1A = 24
+B_1B = 13
+A_1A = 18
+A_1B = 23
+
+#Set up
+import RPi.GPIO as GPIO
+import time
+from gpiozero import LED
+led1 = LED(11)
+led2 = LED(8)
+
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setwarnings(False)
+GPIO.setup(21, GPIO.OUT)
+
+#Set pins as outputs
+
+for pin in [A_1A, A_1B, B_1A, B_1B]:
+    GPIO.setup(pin, GPIO.OUT)
+
+#PWM at 100 Hz
+pwm_A_1A = GPIO.PWM(A_1A, 100)
+pwm_A_1B = GPIO.PWM(A_1B, 100)
+pwm_B_1A = GPIO.PWM(B_1A, 100)
+pwm_B_1B = GPIO.PWM(B_1B, 100)
+
+pwm_A_1A.start(0)
+pwm_A_1B.start(0)
+pwm_B_1A.start(0)
+pwm_B_1B.start(0)
+
+#Define motor movements
+
+def MotorA_forward(speed=100):
+    pwm_A_1A.ChangeDutyCycle(0)
+    pwm_A_1B.ChangeDutyCycle(speed)
+
+def MotorA_backward(speed=100):
+    pwm_A_1A.ChangeDutyCycle(speed)
+    pwm_A_1B.ChangeDutyCycle(0)
+
+def MotorB_forward(speed=100):
+    pwm_B_1A.ChangeDutyCycle(speed)
+    pwm_B_1B.ChangeDutyCycle(0)
+
+def MotorB_backward(speed=100):
+    pwm_B_1A.ChangeDutyCycle(0)
+    pwm_B_1B.ChangeDutyCycle(speed)
+
+def stop_all(speed=100):
+    for pwm in [pwm_A_1A, pwm_A_1B, pwm_B_1A, pwm_B_1B]:
+        pwm.ChangeDutyCycle(speed)
+    GPIO.output(21, GPIO.LOW)
+
+def forward (speed=100):
+    MotorB_forward()
+    MotorA_forward()
+
+def backward (speed=100):
+    MotorA_backward()
+    MotorB_backward()
+    led1.on()
+    led2.on()
+    GPIO.output(21, GPIO.HIGH)
+    time.sleep(0.5)
+    GPIO.output(21, GPIO.LOW)
+    time.sleep(0.5)
+
+
+def rightMajor (speed=50):
+    MotorB_forward()
+    MotorA_backward()
+    time.sleep(0.10)
+    MotorA_forward()
+    MotorB_forward()
+    time.sleep(.0001)
+    stop_all()
+    time.sleep(0.10)
+    
+
+    
+def rightMinor (speed=1):
+    MotorB_forward()
+    MotorA_backward()
+    time.sleep(0.001)
+    stop_all()
+    time.sleep(0.06)
+
+
+def leftMajor (speed=50):
+    MotorA_forward()
+    MotorB_backward()
+    time.sleep(0.10)
+    stop_all()
+    time.sleep(0.10)
+
+
+def leftMinor (speed=1):
+    MotorA_forward()
+    MotorB_backward()
+    time.sleep(0.001)
+    stop_all()
+    time.sleep(0.06)
+
+
 ```
 
 # Bill of Materials
