@@ -909,6 +909,12 @@ if __name__ == '__main__':
 
 
 ```
+Please note that the code for the image recogition abilities are not here.  You can access them using the following links (also at the bottom):
+- [Object Recognition Code Automatic](https://github.com/notindenial/Pi-Object-Recognition/)
+- [Object Recognition Code Manual](https://github.com/sentairanger/YOLO11n-PiCamera2-Livestream/)
+
+
+
 # Bill of Materials
 Here's where you'll list the parts in your project. To add more rows, just copy and paste the example rows below.
 Don't forget to place the link of where to buy each component inside the quotation marks in the corresponding row after href =. Follow the guide [here]([url](https://www.markdownguide.org/extended-syntax/)) to learn how to customize this to your project needs. 
