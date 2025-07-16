@@ -35,7 +35,7 @@ In addition to the larger modifcatiosn mentioned above, I also added a few small
 I really appreciated this project and all the fun things I got to add.  There are still other modifications I am looking to make, like the camera flip mentioned above and swapping in different wheels.  There is also currently an issue with how the camera is positioned.  It struggles to look down and because I raised the camera in the final design that problem is even worse.  It can still track the ball on the ground without issue but it does significantly better with objects in teh air.  If there is a particular modifcation you do not what to make, simply remove it from the code.
 
 ![Headstone Image](RobotFinal1.jpg)
-![Headstone Image](RobotFinal2.jpg)
+![Headstone Image](RobotFinal2jpg.jpg)
 ![Headstone Image](RobotFinal3.jpg)
 ![Headstone Image](RobotFinal4.jpg)
 
